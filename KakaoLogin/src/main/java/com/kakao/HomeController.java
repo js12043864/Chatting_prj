@@ -21,9 +21,20 @@ public class HomeController {
 	  System.out.println("login info : " + userInfo.toString());
 	  if(userInfo.get("email") != null) {
 		  session.setAttribute("userId" , userInfo.get("email"));
-		  session.setAttribute("access_token", accessToken);
+		  session.setAttribute("accessToken", accessToken);
 	  }
 	  mav.addObject("userId", userInfo.get("email"));
+	  mav.setViewName("index");
+	  return mav;
+  }
+  
+  @RequestMapping(value="/logout")
+  public ModelAndView logout(HttpSession session) {
+	  ModelAndView mav = new ModelAndView();
+	  
+	  kakaoApi.kakaoLogout((String)session.getAttribute("accessToken"));
+	  session.removeAttribute("accessToken");
+	  session.removeAttribute("userId");
 	  mav.setViewName("index");
 	  return mav;
   }
